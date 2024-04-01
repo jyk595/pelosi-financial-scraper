@@ -1,18 +1,12 @@
+const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer');
-const puppeteer = require('puppeteer-core');
-const chrome = require('chrome-aws-lambda');
 require('dotenv').config();
 
 const receiveEmail = 'jyk595@gmail.com';
 const today = new Date();
 
 async function scrapeAndSendEmail() {
-    const browser = await puppeteer.launch({
-        executablePath: await chrome.executablePath,
-        args: chrome.args,
-        defaultViewport: chrome.defaultViewport,
-        headless: chrome.headless
-    });
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
     
     // Load the search page
