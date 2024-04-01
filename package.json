@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node scraper.js",
-    "install": "PUPPETEER_PRODUCT=chrome npm install --force puppeteer"
+    "start": "node scraper.js"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +13,6 @@
     "chrome-aws-lambda": "^10.1.0",
     "dotenv": "^16.4.5",
     "nodemailer": "^6.9.13",
-    "puppeteer": "^22.6.1",
-    "puppeteer-core": "^22.6.1"
+    "puppeteer-core": "^10.1.0"
   }
 }
