@@ -1,14 +1,12 @@
-const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer');
+const puppeteer = require('puppeteer');
 require('dotenv').config();
 
-const EMAIL = process.env.EMAIL;
-const PASSWORD = process.env.PASSWORD;
 const receiveEmail = 'jyk595@gmail.com';
 const today = new Date();
 
 async function scrapeAndSendEmail() {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({executablePath: await puppeteer.executablePath()});
     const page = await browser.newPage();
     
     // Load the search page
@@ -29,9 +27,6 @@ async function scrapeAndSendEmail() {
     await page.waitForSelector('#DataTables_Table_0_wrapper');
 
     // Scrape the PDF links
-    // const pdfLinks = await page.$$eval('.result-pdf-link-selector', links => links.map(a => a.href));
-
-    // Create a list of PDF links from the <table> element on the page. Inside the <tbody>, there will be a list of <tr> elements, each representing a row in the table. The <td> elements inside each <tr> represent the columns in the table. The PDF links are usually in the first column of each row inside of an <a> tag.
     let pdfLinks = [];
 
     const links = await page.evaluate(() => {
@@ -60,7 +55,7 @@ function sendEmail(pdfLinks) {
     });
 
     const mailOptions = {
-        from: EMAIL,
+        from: process.env.EMAIL,
         to: receiveEmail,
         subject: `Nancy Pelosi Financial Disclosure ${today.toDateString()}`,
         text: 'Here are the PDF links:\n' + pdfLinks.join('\n')
