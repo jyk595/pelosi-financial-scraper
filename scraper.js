@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const receiveEmail = 'jyk595@gmail.com';
+const receiveEmail = process.env.RECEIVE_EMAIL;
 const today = new Date();
 
 async function scrapeAndSendEmail() {
@@ -30,7 +30,6 @@ async function scrapeAndSendEmail() {
     await page.select('#FilingYear', currentYear);
 
     // Click the "Search" button
-    // Use the correct selector for the search button
     await page.click('button[aria-label="search button"]');
     
     // Wait for search results to load
@@ -40,8 +39,11 @@ async function scrapeAndSendEmail() {
     let pdfLinks = [];
 
     const links = await page.evaluate(() => {
-        const anchors = Array.from(document.querySelectorAll('td.memberName a')); // Selecting all <a> tags inside any td with class 'memberName'
-        return anchors.map(anchor => anchor.href); // Extracting the href from each <a> tag
+        // Selecting all <a> tags inside any td with class 'memberName'
+        const anchors = Array.from(document.querySelectorAll('td.memberName a')); 
+
+        // Extracting the href from each <a> tag
+        return anchors.map(anchor => anchor.href);
     });
 
     await links.forEach(link => pdfLinks.push(link));
@@ -67,8 +69,8 @@ function sendEmail(pdfLinks) {
     const mailOptions = {
         from: process.env.EMAIL,
         to: receiveEmail,
-        subject: `Nancy Pelosi Financial Disclosure ${today.toDateString()}`,
-        text: 'Here are the PDF links:\n' + pdfLinks.join('\n')
+        subject: `Nancy Pelosi Financial Disclosure ${today.getFullYear()} (${pdfLinks.length})`,
+        text: 'Here are the PDF links:\n' + pdfLinks.join('\n\n')
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
