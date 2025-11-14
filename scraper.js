@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
@@ -7,15 +7,15 @@ const today = new Date();
 
 async function scrapeAndSendEmail() {
     const browser = await puppeteer.launch({
+        executablePath: process.env.CHROME_BIN || '/app/.apt/usr/bin/google-chrome',
         args: [
-            '--no-sandbox', 
+            '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--single-process',
-            '--no-zygote',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--single-process'
         ],
-        executablePath: process.env.NODE_ENV === 'production' 
-            ? process.env.PUPPETEER_EXECUTABLE_PATH 
-            : puppeteer.executablePath(),
+        headless: true
     });
     const page = await browser.newPage();
     

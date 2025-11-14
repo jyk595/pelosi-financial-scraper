@@ -1,0 +1,12 @@
+{
+  "name": "house-financial-disclosure-scraper",
+  "description": "A scraper for House financial disclosures",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-google-chrome"
+    }
+  ]
+}
